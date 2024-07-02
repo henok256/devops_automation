@@ -11,7 +11,7 @@ public class DevopsIntegrationApplication {
 
     @GetMapping("/")
     public String Home(){
-        return "Home sweet Home";
+        return "Home sweet Home, a place to be there!";
     }
 
     public static void main(String[] args) {

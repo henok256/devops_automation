@@ -7,16 +7,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                script {
-                    withCredentials([string(credentialsId: 'github-credentials', variable: 'GITHUB_TOKEN')]) {
-                        sh 'git config --global credential.helper store'
-                        sh 'echo "https://${GITHUB_TOKEN}@github.com" > ~/.git-credentials'
-                        checkout([$class: 'GitSCM', branches: [[name: '*/main']],
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']],
                           userRemoteConfigs: [[url: 'https://github.com/henok256/devops_automation']]])
-                    }
             }
-            }
-
         }
         stage('Build Maven') {
             steps {
@@ -30,17 +23,15 @@ pipeline {
                 }
             }
         }
-        stage('push image to docker'){
-            steps{
-                script{
-                  withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+        stage('Push Image to Docker') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                         sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                         sh 'docker push henok256/devops-integration'
                     }
-
                 }
             }
-
         }
     }
     post {
@@ -49,4 +40,3 @@ pipeline {
         }
     }
 }
-

@@ -2,7 +2,7 @@ pipeline {
     agent any
     tools {
         maven 'maven'
-        git 'Default Git' // Ensure this matches the name you provided in the Git configuration
+
     }
 
     stages {
